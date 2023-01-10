@@ -1,24 +1,109 @@
-import logo from './logo.svg';
-import './App.css';
+// Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
+// Bootstrap Bundle JS
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import Layout from "./components/layouts/Layout";
+import InnerLayout from "./components/layouts/InnerLayout";
+import InputSecond from "./components/InputSecond";
+import InputFirst from "./components/InputFirst";
+import { useRef, useState } from "react";
+
+const services = [
+  { serviceId: 1, title: "Personal training", price: 5000 },
+  { serviceId: 2, title: "Diet consulting", price: 4000 },
+  { serviceId: 3, title: "Sport massage", wage: 6500 },
+  { serviceId: 4, title: "Adobe Premier", wage: 7000 },
+  { serviceId: 5, title: "Lightroom", wage: 7400 },
+  { serviceId: 7, title: "Adobe Photoshop", wage: 3999 },
+];
 
 function App() {
+  const [components, setComponents] = useState([
+    <InputFirst services={services} key={1} />,
+  ]);
+
+  const handleAddFirstClick = () => {
+    setComponents([
+      ...components,
+      <InputFirst services={services} key={components.length + 1} />,
+    ]);
+  };
+
+  function Save(e) {
+    e.preventDefault();
+  }
+
+  // const ref = useRef();
+  // const titleInputRef = useRef();
+  // const imageInpurRef = useRef();
+  // const addressInputRef = useRef();
+  // const descriptionInputRef = useRef();
+  const payload = {
+    subscription: {
+      title: "Subscription new",
+    },
+    credits: [
+      {
+        credits: 4,
+        serviceIds: [3],
+      },
+      {
+        credits: 120,
+        serviceIds: [1, 2],
+      },
+    ],
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <form className="p-5" style={{ border: "1px solid gray" }}>
+        <h3 className="text-primary">Subscription</h3>
+        <div className="form-group">
+          <label htmlFor="exampleFormControlInput1">Title</label>
+          <input type="email" className="form-control" />
+        </div>
+        <hr className="hr mt-5" />
+        <h4 className="text-muted">Including</h4>
+        <InnerLayout>
+          <InputFirst services={services} />
+          {components.map((component, index) => component)}
+          <div className="d-flex justify-content-center">
+            <button
+              type="button"
+              onClick={handleAddFirstClick}
+              className="my-2 btn btn-outline-primary"
+            >
+              add
+            </button>
+          </div>
+        </InnerLayout>
+        <InnerLayout>
+          <InputSecond services={services} />
+          <div className="d-flex justify-content-center">
+            <button className="my-2 btn btn-outline-primary rounded">
+              Add
+            </button>
+          </div>
+        </InnerLayout>
+        <button className="btn btn-lg btn-primary">Add+</button>
+        <hr className="hr" />
+        <div className="text-right">
+          <button
+            type="button"
+            className="float-right mx-2 btn btn-outline-secondary"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={Save}
+            type="button"
+            className="float-right mx-2 btn btn-primary"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </Layout>
   );
 }
 
