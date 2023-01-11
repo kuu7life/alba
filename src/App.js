@@ -6,7 +6,8 @@ import Layout from "./components/layouts/Layout";
 import InnerLayout from "./components/layouts/InnerLayout";
 import InputSecond from "./components/InputSecond";
 import InputFirst from "./components/InputFirst";
-import { useRef, useState } from "react";
+import FavoritesContext from "./store/appcontext";
+import { useContext, useRef, useState } from "react";
 
 const services = [
   { serviceId: 1, title: "Personal training", price: 5000 },
@@ -18,6 +19,13 @@ const services = [
 ];
 
 function App() {
+  const appcontext = useContext(FavoritesContext);
+
+  const title = useRef();
+  function Onchange() {
+    appcontext.subscription.title = title.current.value;
+  }
+
   const [components, setComponents] = useState([
     <InputFirst services={services} key={1} />,
   ]);
@@ -31,28 +39,8 @@ function App() {
 
   function Save(e) {
     e.preventDefault();
+    console.log(appcontext);
   }
-
-  // const ref = useRef();
-  // const titleInputRef = useRef();
-  // const imageInpurRef = useRef();
-  // const addressInputRef = useRef();
-  // const descriptionInputRef = useRef();
-  const payload = {
-    subscription: {
-      title: "Subscription new",
-    },
-    credits: [
-      {
-        credits: 4,
-        serviceIds: [3],
-      },
-      {
-        credits: 120,
-        serviceIds: [1, 2],
-      },
-    ],
-  };
 
   return (
     <Layout>
@@ -60,7 +48,7 @@ function App() {
         <h3 className="text-primary">Subscription</h3>
         <div className="form-group">
           <label htmlFor="exampleFormControlInput1">Title</label>
-          <input type="email" className="form-control" />
+          <input onChange={Onchange} type="email" className="form-control" ref={title} />
         </div>
         <hr className="hr mt-5" />
         <h4 className="text-muted">Including</h4>
